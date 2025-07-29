@@ -2,6 +2,11 @@ import { usePowerOps } from "../hooks/usePowerOps";
 import { useRenew } from "../hooks/useRenew";
 import LoadingSpinner from "./LoadingSpinner";
 
+const IS_PLUS =
+  String(import.meta.env.VITE_PLUS ?? "false")
+    .trim()
+    .toLowerCase() === "true";
+
 export default function ControlButtons({ online }) {
   const power = usePowerOps();
   const renew = useRenew();
@@ -18,13 +23,15 @@ export default function ControlButtons({ online }) {
         </button>
       )}
 
-      <button
-        className="btn-secondary"
-        onClick={() => renew.mutate()}
-        disabled={renew.isLoading}
-      >
-        {renew.isLoading ? <LoadingSpinner /> : "시간 연장"}
-      </button>
+      {!IS_PLUS && (
+        <button
+          className="btn-secondary"
+          onClick={() => renew.mutate()}
+          disabled={renew.isLoading}
+        >
+          {renew.isLoading ? <LoadingSpinner /> : "시간 연장"}
+        </button>
+      )}
     </div>
   );
 }
